@@ -1,0 +1,14 @@
+D:\CODES\C#\FileOrganizerApp\bin\Debug\net9.0\FileOrganizerApp.exe
+D:\CODES\C#\FileOrganizerApp\bin\Debug\net9.0\FileOrganizerApp.deps.json
+D:\CODES\C#\FileOrganizerApp\bin\Debug\net9.0\FileOrganizerApp.runtimeconfig.json
+D:\CODES\C#\FileOrganizerApp\bin\Debug\net9.0\FileOrganizerApp.dll
+D:\CODES\C#\FileOrganizerApp\bin\Debug\net9.0\FileOrganizerApp.pdb
+D:\CODES\C#\FileOrganizerApp\obj\Debug\net9.0\FileOrganizerApp.GeneratedMSBuildEditorConfig.editorconfig
+D:\CODES\C#\FileOrganizerApp\obj\Debug\net9.0\FileOrganizerApp.AssemblyInfoInputs.cache
+D:\CODES\C#\FileOrganizerApp\obj\Debug\net9.0\FileOrganizerApp.AssemblyInfo.cs
+D:\CODES\C#\FileOrganizerApp\obj\Debug\net9.0\FileOrganizerApp.csproj.CoreCompileInputs.cache
+D:\CODES\C#\FileOrganizerApp\obj\Debug\net9.0\FileOrganizerApp.dll
+D:\CODES\C#\FileOrganizerApp\obj\Debug\net9.0\refint\FileOrganizerApp.dll
+D:\CODES\C#\FileOrganizerApp\obj\Debug\net9.0\FileOrganizerApp.pdb
+D:\CODES\C#\FileOrganizerApp\obj\Debug\net9.0\FileOrganizerApp.genruntimeconfig.cache
+D:\CODES\C#\FileOrganizerApp\obj\Debug\net9.0\ref\FileOrganizerApp.dll
