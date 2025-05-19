@@ -1,7 +1,7 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
 Console.Title = "File Organizer App";
-Console.ForegroundColor = ConsoleColor.Green;
+Console.ForegroundColor = ConsoleColor.White;
 // Console.WindowHeight = 10;
 
 // System.IO.Directory.GetFiles() – get all files
@@ -17,11 +17,32 @@ Console.ForegroundColor = ConsoleColor.Green;
 // Console.ReadLine();
 // Console.WriteLine("I see");
 
-Car myObj = new();
-Console.WriteLine(myObj.color);
-Console.ReadKey();
+// Car myObj = new();
+// Console.WriteLine(myObj.color);
+// Console.ReadKey();
 
-class Car
+// class Car
+// {
+//     public string color = "red";
+// }
+
+Console.WriteLine("Welcome to File Organizer App!\nPress any key to continue...");
+Console.ReadKey();
+Console.Clear();
+
+Console.WriteLine("Please enter the folder path you want to organize");
+string path = Console.ReadLine();
+Console.Clear();
+
+while (!Directory.Exists(path))
 {
-    public string color = "red";
+    Console.WriteLine("Error no existing file path");
+    Console.WriteLine("Please enter a valid folder path you want to organize");
+    path = Console.ReadLine();
+    Console.Clear();
 }
+
+Console.WriteLine("You input an existing folder path, thank you!");
+
+
+Console.ReadLine();

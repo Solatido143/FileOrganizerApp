@@ -12,3 +12,4 @@ D:\CODES\C#\FileOrganizerApp\obj\Debug\net9.0\refint\FileOrganizerApp.dll
 D:\CODES\C#\FileOrganizerApp\obj\Debug\net9.0\FileOrganizerApp.pdb
 D:\CODES\C#\FileOrganizerApp\obj\Debug\net9.0\FileOrganizerApp.genruntimeconfig.cache
 D:\CODES\C#\FileOrganizerApp\obj\Debug\net9.0\ref\FileOrganizerApp.dll
+D:\CODES\C#\FileOrganizerApp\obj\Debug\net9.0\FileOrganizerApp.sourcelink.json
