@@ -16,7 +16,7 @@ Console.Clear();
 
 while (!Directory.Exists(path))
 {
-    Console.WriteLine("Error no existing file path");
+    Console.WriteLine("Error: no existing path");
     Console.WriteLine("Please enter a valid folder path you want to organize");
     path = Console.ReadLine();
     Console.Clear();
