@@ -6,10 +6,55 @@ Console.Title = "File Organizer App";
 Console.ForegroundColor = ConsoleColor.White;
 // Console.WindowHeight = 10;
 
+Console.WriteLine("Welcome to File Organizer App!\nPress any key to continue...");
+Console.ReadKey();
+Console.Clear();
+
+Console.WriteLine("Please enter the folder path you want to organize");
+string? path = Console.ReadLine();
+Console.Clear();
+
+while (!Directory.Exists(path))
+{
+    Console.WriteLine("Error no existing file path");
+    Console.WriteLine("Please enter a valid folder path you want to organize");
+    path = Console.ReadLine();
+    Console.Clear();
+}
+
+string[] files = Directory.GetFiles(path);
+string extensions;
+Console.WriteLine($"Found {files.Length} files.");
+
+foreach (string file in files)
+{
+    extensions = Path.GetExtension(file).TrimStart('.');
+    string targetFolder = Path.Combine(path, extensions);
+
+    if (!Directory.Exists(targetFolder))
+    {
+        Directory.CreateDirectory(targetFolder);
+    }
+
+    string fileName = Path.GetFileName(file);
+    string destinationPath = Path.Combine(targetFolder, fileName);
+
+    File.Move(file, destinationPath);
+}
+
+Console.WriteLine($"{files.Length} files organized.");
+
+Console.ReadLine();
+
 // System.IO.Directory.GetFiles() – get all files
 // Path.GetExtension() – determine file type
 // Directory.CreateDirectory() – create folders
 // File.Move() – move files to new folders
+
+
+
+
+
 
 // Console.WriteLine("This is my first console C# project!\nPress any key to continue...");
 // Console.ReadKey();
@@ -27,34 +72,3 @@ Console.ForegroundColor = ConsoleColor.White;
 // {
 //     public string color = "red";
 // }
-
-Console.WriteLine("Welcome to File Organizer App!\nPress any key to continue...");
-Console.ReadKey();
-Console.Clear();
-
-Console.WriteLine("Please enter the folder path you want to organize");
-string path = Console.ReadLine();
-Console.Clear();
-
-while (!Directory.Exists(path))
-{
-    Console.WriteLine("Error no existing file path");
-    Console.WriteLine("Please enter a valid folder path you want to organize");
-    path = Console.ReadLine();
-    Console.Clear();
-}
-
-Console.WriteLine("You input an existing folder path, thank you!");
-
-string[] files = Directory.GetFiles(path);
-
-string extensions;
-
-
-foreach (string file in files)
-{
-    extensions = Path.GetExtension(file);
-    Console.WriteLine(extensions);
-}
-
-Console.ReadLine();
