@@ -52,11 +52,10 @@ class FileOrganizer
     {
         files = Directory.GetFiles(path);
         filesCount = files.Length;
-        string extensions;
 
         foreach (string file in files)
         {
-            extensions = Path.GetExtension(file).TrimStart('.');
+            string extensions = Path.GetExtension(file).TrimStart('.');
             string targetFolder = Path.Combine(path, extensions);
 
             if (!Directory.Exists(targetFolder))
