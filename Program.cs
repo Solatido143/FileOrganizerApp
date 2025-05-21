@@ -30,6 +30,7 @@ while (!Directory.Exists(inputPath))
 FileOrganizer organizer = new(inputPath);
 organizer.OrganizeFiles();
 
+Console.WriteLine($"Found {organizer.filesCount} files.");
 Console.WriteLine("Files organized successfully.");
 Console.ReadLine();
 
@@ -37,6 +38,7 @@ class FileOrganizer
 {
     // properties
     private string path;
+    public int filesCount;
     private string[] files = Array.Empty<string>();
 
     // constructor
@@ -49,6 +51,7 @@ class FileOrganizer
     public void OrganizeFiles()
     {
         files = Directory.GetFiles(path);
+        filesCount = files.Length;
         string extensions;
 
         foreach (string file in files)
@@ -74,6 +77,7 @@ class FileOrganizer
             {
                 extensions = "Unknown";
             }
+
 
             File.Move(file, destinationPath);
         }
