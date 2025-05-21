@@ -1,5 +1,10 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
+// System.IO.Directory.GetFiles() – get all files
+// Path.GetExtension() – determine file type
+// Directory.CreateDirectory() – create folders
+// File.Move() – move files to new folders
+
 using System.Runtime.CompilerServices;
 
 Console.Title = "File Organizer App";
@@ -11,64 +16,66 @@ Console.ReadKey();
 Console.Clear();
 
 Console.WriteLine("Please enter the folder path you want to organize");
-string? path = Console.ReadLine();
+string? inputPath = Console.ReadLine();
 Console.Clear();
 
-while (!Directory.Exists(path))
+while (!Directory.Exists(inputPath))
 {
     Console.WriteLine("Error: no existing path");
     Console.WriteLine("Please enter a valid folder path you want to organize");
-    path = Console.ReadLine();
+    inputPath = Console.ReadLine();
     Console.Clear();
 }
 
-string[] files = Directory.GetFiles(path);
-string extensions;
-Console.WriteLine($"Found {files.Length} files.");
+FileOrganizer organizer = new(inputPath);
+organizer.OrganizeFiles();
 
-foreach (string file in files)
-{
-    extensions = Path.GetExtension(file).TrimStart('.');
-    string targetFolder = Path.Combine(path, extensions);
-
-    if (!Directory.Exists(targetFolder))
-    {
-        Directory.CreateDirectory(targetFolder);
-    }
-
-    string fileName = Path.GetFileName(file);
-    string destinationPath = Path.Combine(targetFolder, fileName);
-
-    File.Move(file, destinationPath);
-}
-
-Console.WriteLine($"{files.Length} files organized.");
-
+Console.WriteLine("Files organized successfully.");
 Console.ReadLine();
 
-// System.IO.Directory.GetFiles() – get all files
-// Path.GetExtension() – determine file type
-// Directory.CreateDirectory() – create folders
-// File.Move() – move files to new folders
+class FileOrganizer
+{
+    // properties
+    private string path;
+    private string[] files = Array.Empty<string>();
 
+    // constructor
+    public FileOrganizer(string _path)
+    {
+        path = _path;
+    }
 
+    // methods
+    public void OrganizeFiles()
+    {
+        files = Directory.GetFiles(path);
+        string extensions;
 
+        foreach (string file in files)
+        {
+            extensions = Path.GetExtension(file).TrimStart('.');
+            string targetFolder = Path.Combine(path, extensions);
 
+            if (!Directory.Exists(targetFolder))
+            {
+                Directory.CreateDirectory(targetFolder);
+            }
 
+            string fileName = Path.GetFileName(file);
+            string destinationPath = Path.Combine(targetFolder, fileName);
 
-// Console.WriteLine("This is my first console C# project!\nPress any key to continue...");
-// Console.ReadKey();
-// Console.WriteLine("What is your name?");
-// string userName = Console.ReadLine();
-// Console.WriteLine("Hello, " + userName + "\nHow are you?");
-// Console.ReadLine();
-// Console.WriteLine("I see");
+            if (File.Exists(destinationPath))
+            {
+                Console.WriteLine($"Skipping {fileName} — already exists.");
+                continue;
+            }
 
-// Car myObj = new();
-// Console.WriteLine(myObj.color);
-// Console.ReadKey();
+            if (string.IsNullOrWhiteSpace(extensions))
+            {
+                extensions = "Unknown";
+            }
 
-// class Car
-// {
-//     public string color = "red";
-// }
+            File.Move(file, destinationPath);
+        }
+    }
+}
