@@ -25,7 +25,7 @@ if (!FileOrganizer.ConfirmPath(validPath))
 
 FileOrganizer organizer = new(validPath);
 organizer.OrganizeFiles();
-if (organizer.fileCount < 0)
+if (organizer.fileCount == 0)
 {
     Console.WriteLine("No files to organize.");
 }
