@@ -15,14 +15,26 @@ Console.WriteLine("Welcome to File Organizer App!\nPress any key to continue..."
 Console.ReadKey();
 Console.Clear();
 
-// Console.WriteLine("How do you want your files to be organize?");
-// Console.WriteLine("1 - by Date\n2 - by Type\n3 - by Size");
-
 string validPath = FileOrganizer.GetValidPath();
+if (!FileOrganizer.ConfirmPath(validPath))
+{
+    Console.WriteLine("Operation cancelled.");
+    Console.ReadKey();
+    return;
+}
+
 FileOrganizer organizer = new(validPath);
 organizer.OrganizeFiles();
+if (organizer.fileCount < 0)
+{
+    Console.WriteLine("No files to organize.");
+}
+else
+{
+    Console.WriteLine($"Found {organizer.fileCount} file/s.");
+    Console.WriteLine($"Files organized successfully.");
+}
 
-Console.WriteLine($"Found {organizer.fileCount} files.\nFiles organized successfully.");
 Console.ReadLine();
 
 class FileOrganizer
@@ -52,38 +64,12 @@ class FileOrganizer
             Console.Clear();
         }
 
-        Console.WriteLine($"{path}\nAre you sure you want to organize this path? (y/n)");
-        string confirmation = Console.ReadLine();
-        Console.Clear();
-
-        while (confirmation != "y" && confirmation != "Y" && confirmation != "n" && confirmation != "N")
-        {
-            Console.WriteLine("Are you sure you want to organize this path? (y/n)");
-            confirmation = Console.ReadLine();
-            Console.Clear();
-        }
-
-        if (confirmation == "y" || confirmation == "Y")
-        {
-            return path!;
-        }
-        else 
-        {
-            return GetValidPath();
-        }
+        return path!;
     }
     public void OrganizeFiles()
     {
         files = Directory.GetFiles(path);
         fileCount = files.Length;
-
-        if (fileCount < 1)
-        {
-            Console.WriteLine("No files to organize.");
-            Console.ReadKey();
-            Console.Clear();
-            GetValidPath();
-        }
 
         foreach (string file in files)
         {
@@ -115,4 +101,21 @@ class FileOrganizer
             Console.WriteLine($"Moved: {fileName} → {targetFolder}");
         }
     }
+
+    public static bool ConfirmPath(string path)
+    {
+        Console.WriteLine($"{path}\nAre you sure you want to organize this path? (y/n)");
+        string? input = Console.ReadLine();
+        Console.Clear();
+
+        while (input?.ToLower() != "y" && input?.ToLower() != "n")
+        {
+            Console.WriteLine("Are you sure you want to organize this path? (y/n)");
+            input = Console.ReadLine();
+            Console.Clear();
+        }
+
+        return input?.ToLower() == "y";
+    }
+
 }
