@@ -15,12 +15,14 @@ Console.WriteLine("Welcome to File Organizer App!\nPress any key to continue..."
 Console.ReadKey();
 Console.Clear();
 
+// Console.WriteLine("How do you want your files to be organize?");
+// Console.WriteLine("1 - by Date\n2 - by Type\n3 - by Size");
+
 string validPath = FileOrganizer.GetValidPath();
 FileOrganizer organizer = new(validPath);
 organizer.OrganizeFiles();
 
-Console.WriteLine($"Found {organizer.fileCount} files.");
-Console.WriteLine("Files organized successfully.");
+Console.WriteLine($"Found {organizer.fileCount} files.\nFiles organized successfully.");
 Console.ReadLine();
 
 class FileOrganizer
@@ -45,17 +47,43 @@ class FileOrganizer
 
         while (!Directory.Exists(path))
         {
-            Console.WriteLine("Error: no existing path");
-            Console.WriteLine("Please enter a valid folder path you want to organize");
+            Console.WriteLine("Error: no existing path\nPlease enter a valid folder path you want to organize");
             path = Console.ReadLine();
             Console.Clear();
         }
-        return path!;
+
+        Console.WriteLine($"{path}\nAre you sure you want to organize this path? (y/n)");
+        string confirmation = Console.ReadLine();
+        Console.Clear();
+
+        while (confirmation != "y" && confirmation != "Y" && confirmation != "n" && confirmation != "N")
+        {
+            Console.WriteLine("Are you sure you want to organize this path? (y/n)");
+            confirmation = Console.ReadLine();
+            Console.Clear();
+        }
+
+        if (confirmation == "y" || confirmation == "Y")
+        {
+            return path!;
+        }
+        else 
+        {
+            return GetValidPath();
+        }
     }
     public void OrganizeFiles()
     {
         files = Directory.GetFiles(path);
         fileCount = files.Length;
+
+        if (fileCount < 1)
+        {
+            Console.WriteLine("No files to organize.");
+            Console.ReadKey();
+            Console.Clear();
+            GetValidPath();
+        }
 
         foreach (string file in files)
         {
