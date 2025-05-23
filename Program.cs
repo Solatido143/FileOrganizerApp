@@ -15,33 +15,28 @@ Console.WriteLine("Welcome to File Organizer App!\nPress any key to continue..."
 Console.ReadKey();
 Console.Clear();
 
-string validPath = FileOrganizer.GetValidPath();
-if (!FileOrganizer.ConfirmPath(validPath))
-{
-    Console.WriteLine("Operation cancelled.");
-    Console.ReadKey();
-    return;
-}
-
+string validPath = FileOrganizer.GetConfirmedPath();
 FileOrganizer organizer = new(validPath);
 organizer.OrganizeFiles();
-if (organizer.fileCount == 0)
+
+if (organizer.totalFiles == 0)
 {
     Console.WriteLine("No files to organize.");
 }
 else
 {
-    Console.WriteLine($"Found {organizer.fileCount} file/s.");
-    Console.WriteLine($"Files organized successfully.");
+    Console.WriteLine($"Found {organizer.totalFiles} file/s.");
+    Console.WriteLine("Files organized successfully.");
 }
 
 Console.ReadLine();
+
 
 class FileOrganizer
 {
     // properties
     private string path;
-    public int fileCount;
+    public int totalFiles;
     private string[] files = Array.Empty<string>();
 
     // constructor
@@ -66,10 +61,48 @@ class FileOrganizer
 
         return path!;
     }
+    public static bool ConfirmPath(string path)
+    {
+        Console.WriteLine($"{path}\nAre you sure you want to organize this path? (y/n)");
+        string? input = Console.ReadLine();
+        Console.Clear();
+
+        while (input?.ToLower() != "y" && input?.ToLower() != "n")
+        {
+            Console.WriteLine("Are you sure you want to organize this path? (y/n)");
+            input = Console.ReadLine();
+            Console.Clear();
+        }
+
+        return input?.ToLower() == "y";
+    }
+    public static string GetConfirmedPath()
+    {
+        string validPath;
+
+        do
+        {
+            validPath = FileOrganizer.GetValidPath();
+            if (!FileOrganizer.ConfirmPath(validPath))
+            {
+                Console.WriteLine("You cancelled the operation. Press any key to try a different folder...");
+                Console.ReadKey();
+                Console.Clear();
+            }
+            else
+            {
+                break;
+            }
+        } while (true);
+
+        return validPath;
+    }
+
     public void OrganizeFiles()
     {
         files = Directory.GetFiles(path);
-        fileCount = files.Length;
+        totalFiles = files.Length;
+        int skipped = 0;
 
         foreach (string file in files)
         {
@@ -92,6 +125,7 @@ class FileOrganizer
 
             if (File.Exists(destinationPath))
             {
+                skipped++;
                 Console.WriteLine($"Skipping {fileName} — already exists.");
                 continue;
             }
@@ -100,22 +134,10 @@ class FileOrganizer
 
             Console.WriteLine($"Moved: {fileName} → {targetFolder}");
         }
-    }
-
-    public static bool ConfirmPath(string path)
-    {
-        Console.WriteLine($"{path}\nAre you sure you want to organize this path? (y/n)");
-        string? input = Console.ReadLine();
-        Console.Clear();
-
-        while (input?.ToLower() != "y" && input?.ToLower() != "n")
+        if (skipped > 0)
         {
-            Console.WriteLine("Are you sure you want to organize this path? (y/n)");
-            input = Console.ReadLine();
-            Console.Clear();
+            Console.WriteLine($"{skipped} files(s) were skipped because they already exist in their destination.");
         }
-
-        return input?.ToLower() == "y";
     }
 
 }
