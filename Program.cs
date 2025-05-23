@@ -1,6 +1,4 @@
-﻿// See https://aka.ms/new-console-template for more information
-
-// System.IO.Directory.GetFiles() – get all files
+﻿// System.IO.Directory.GetFiles() – get all files
 // Path.GetExtension() – determine file type
 // Directory.CreateDirectory() – create folders
 // File.Move() – move files to new folders
@@ -21,12 +19,11 @@ organizer.OrganizeFiles();
 
 if (organizer.totalFiles == 0)
 {
-    Console.WriteLine("No files to organize.");
+    Console.WriteLine("No files were organized.");
 }
 else
 {
-    Console.WriteLine($"Found {organizer.totalFiles} file/s.");
-    Console.WriteLine("Files organized successfully.");
+    Console.WriteLine($"Organized {organizer.totalFiles} file(s).");
 }
 
 Console.ReadLine();
@@ -103,6 +100,7 @@ class FileOrganizer
         files = Directory.GetFiles(path);
         totalFiles = files.Length;
         int skipped = 0;
+        int moved = 0;
 
         foreach (string file in files)
         {
@@ -131,9 +129,10 @@ class FileOrganizer
             }
 
             File.Move(file, destinationPath);
-
+            moved++;
             Console.WriteLine($"Moved: {fileName} → {targetFolder}");
         }
+        totalFiles = moved;
         if (skipped > 0)
         {
             Console.WriteLine($"{skipped} files(s) were skipped because they already exist in their destination.");
