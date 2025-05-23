@@ -26,7 +26,10 @@ else
     Console.WriteLine($"Organized {organizer.totalFiles} file(s).");
 }
 
-Console.ReadLine();
+Console.ReadKey();
+
+
+
 
 
 class FileOrganizer
@@ -138,5 +141,4 @@ class FileOrganizer
             Console.WriteLine($"{skipped} files(s) were skipped because they already exist in their destination.");
         }
     }
-
 }
