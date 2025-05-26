@@ -3,8 +3,6 @@
 // Directory.CreateDirectory() – create folders
 // File.Move() – move files to new folders
 
-using System.Runtime.CompilerServices;
-
 Console.Title = "File Organizer App";
 Console.ForegroundColor = ConsoleColor.White;
 // Console.WindowHeight = 10;
@@ -13,9 +11,23 @@ Console.WriteLine("Welcome to File Organizer App!\nPress any key to continue..."
 Console.ReadKey();
 Console.Clear();
 
+Console.WriteLine("How do you want your files to be organize?");
+Console.WriteLine("1 - by Date\nPress any key for default(By File Type)");
+
+ConsoleKeyInfo choice = Console.ReadKey();
+Console.Clear();
+
 string validPath = FileOrganizer.GetConfirmedPath();
 FileOrganizer organizer = new(validPath);
-organizer.OrganizeFiles();
+
+if (choice.KeyChar == '1')
+{
+    organizer.OrganizeByDate();
+}
+else
+{
+    organizer.OrganizeByType();
+}
 
 if (organizer.totalFiles == 0)
 {
@@ -25,6 +37,15 @@ else
 {
     Console.WriteLine($"Organized {organizer.totalFiles} file(s).");
 }
+
+Console.WriteLine("\nDo you want to undo the operation? (y/n)");
+Console.WriteLine("Note: Undo only works for this session.");
+string? undoChoice = Console.ReadLine()?.ToLower();
+if (undoChoice == "y")
+{
+    organizer.UndoLastOperation();
+}
+
 
 Console.ReadKey();
 
@@ -38,6 +59,8 @@ class FileOrganizer
     private string path;
     public int totalFiles;
     private string[] files = Array.Empty<string>();
+    private List<(string from, string to)> moveLog = new();
+
 
     // constructor
     public FileOrganizer(string _path)
@@ -98,7 +121,7 @@ class FileOrganizer
         return validPath;
     }
 
-    public void OrganizeFiles()
+    public void OrganizeByType()
     {
         files = Directory.GetFiles(path);
         totalFiles = files.Length;
@@ -132,6 +155,7 @@ class FileOrganizer
             }
 
             File.Move(file, destinationPath);
+            moveLog.Add((file, destinationPath));
             moved++;
             Console.WriteLine($"Moved: {fileName} → {targetFolder}");
         }
@@ -141,4 +165,71 @@ class FileOrganizer
             Console.WriteLine($"{skipped} files(s) were skipped because they already exist in their destination.");
         }
     }
+
+    public void OrganizeByDate()
+    {
+        files = Directory.GetFiles(path);
+        totalFiles = files.Length;
+        int skipped = 0;
+        int moved = 0;
+
+        foreach (string file in files)
+        {
+            string dateFolder = File.GetLastWriteTime(file).ToString("yyyy-MM");
+            string targetFolder = Path.Combine(path, dateFolder);
+            if (!Directory.Exists(targetFolder)) Directory.CreateDirectory(targetFolder);
+
+            string fileName = Path.GetFileName(file);
+            string destinationPath = Path.Combine(targetFolder, fileName);
+
+            if (File.Exists(destinationPath))
+            {
+                skipped++;
+                Console.WriteLine($"Skipping {fileName} — already exists.");
+                continue;
+            }
+            File.Move(file, destinationPath);
+            moveLog.Add((file, destinationPath));
+            moved++;
+            Console.WriteLine($"Moved: {fileName} → {targetFolder}");
+        }
+
+        totalFiles = moved;
+        if (skipped > 0)
+        {
+            Console.WriteLine($"{skipped} file(s) were skipped because they already exist.");
+        }
+    }
+
+    public void UndoLastOperation()
+    {
+        Console.WriteLine("Undoing operation...");
+        int undone = 0;
+        foreach (var move in moveLog)
+        {
+            try
+            {
+                string fileName = Path.GetFileName(move.from);
+                if (File.Exists(move.to))
+                {
+                    if (File.Exists(move.from))
+                    {
+                        Console.WriteLine($"Skipping undo for {fileName} — original file already exists.");
+                        continue;
+                    }
+
+                    File.Move(move.to, move.from);
+                    undone++;
+                    Console.WriteLine($"Restored: {fileName}");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error restoring {move.to} → {move.from}: {ex.Message}");
+            }
+        }
+
+        Console.WriteLine($"Undo complete! {undone} file(s) restored.");
+    }
+
 }
